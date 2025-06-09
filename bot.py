@@ -1313,7 +1313,7 @@ chat_ids = set()
 last_horoscope_usage = {}
 number_game_active = {}
 number_game_number = {}
- story_games[chat_id] = {
+story_games[chat_id] = {
      "players": [user1, user2],
      "current_index": 0,
      "story": [],
