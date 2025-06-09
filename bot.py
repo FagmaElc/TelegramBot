@@ -7,6 +7,8 @@ from flask import Flask
 from threading import Thread
 from telegram import Update
 from telegram.constants import ParseMode
+from telegram import Update
+from telegram.ext import ContextTypes
 from telegram.ext import (
     ApplicationBuilder, CommandHandler, MessageHandler,
     ContextTypes, filters
@@ -1531,6 +1533,26 @@ predictionsTomorrow = [
     "{user1} завтра попытается объяснить, почему всё это твоя вина.",
     "Завтра ты вдохновишь сам себя. И снова пойдёшь спать."
 ]
+
+tyan_images = [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmubOn7sfXN_YFy2aQlSO2X2pZKuOI-em9BA&s",
+    "https://i.pinimg.com/474x/ab/08/55/ab0855f46a68936d47b56bce0212df84.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNVC_TndFnwTyLGfvhQ1vO5zCt47Bc0u663g&s",
+    "https://sun9-39.userapi.com/impg/wUGlPlR4u7ePG-oli52nlcILPLGW7jk0YqcNhg/zLp8RvrZseo.jpg?size=427x604&quality=95&sign=086479f2c4110b7072e57a1f2f2e46bb&type=album",
+    "https://sun9-64.userapi.com/impg/GZBVqjcSBlrcYQ-0p3he0VU2WcJKnLMP_0qKKA/JlDqaQeOUKg.jpg?size=416x604&quality=96&sign=67a724522412549d671dea1fca8feed8&type=album",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiqIspzQcCiE4djqAuXsc2Z1hvPdWOiiWZkTKmnNGXzjtzsD1vtVYJ7GNo1T9HEKw5AMo&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3UxCJSYj-UcNI_kP-eNTqPQaTuzaABHm22Q&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRniLOvn74rSvrkDr6FkwbuJs9y2P-Yb6lYFPp7jTY1zRQ9pA3QEegVsOfwGcNsZT6ci_A&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXegZihWx2tAVWRWo4fhOqQK90_AV7HfzOKwm9UPU5-qPVZCzcneqU2-dFze91vBQiruk&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQMBabC0Gzs2dP_8KzPDlL4ucbHy4qZH_BmA&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnUEW4fhdamHl9nmvg2C1yLedGPCGp6SM9CQ&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTslF3121lZA1vOIaL0ssbsrRZpkn0eBISF0ri1C0Ehs706_fubq6rJxeLhGLH-A2BHYOk&usqp=CAU",
+    "https://pm1.aminoapps.com/6517/ed2a003b38a808baf62b42166291d7cb34fbcc19_hq.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNgsmdPmLg56M18DhYDN5j6PwOwD79Qimc3T0oQXL2nXEYJBa4QTDkBcbSpiUD-oR5FBU&usqp=CAU",
+    "https://kartinki.pics/uploads/posts/2021-07/1626159838_40-kartinkin-com-p-anime-tyanki-s-ushkami-anime-krasivo-47.jpg",
+    # добавь сколько хочешь ссылок
+]
+
 chat_members = {}
 chat_ids = set()
 last_horoscope_usage = {}
@@ -1664,6 +1686,18 @@ async def horoscope(update: Update, context: ContextTypes.DEFAULT_TYPE):
         message += f"▶️  {sign} ({dates}): {prediction}\n"
     await update.message.reply_text(message)
 
+async def tyan(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = update.effective_user
+    user_display = f"@{user.username}" if user.username else user.full_name
+
+    if not tyan_images:
+        await update.message.reply_text("🧙‍♀️ У Бабы Мани закончились аниме-девочки!")
+        return
+
+    photo_url = random.choice(tyan_images)
+    caption = f"✨ Баба Маня превратила {user_display} в аниме-девочку!"
+
+    await update.message.reply_photo(photo=photo_url, caption=caption)
 
 async def auto_post(app):
     await asyncio.sleep(10)
@@ -1700,6 +1734,7 @@ def main():
     app.add_handler(CommandHandler("Ball", ball))
     app.add_handler(CommandHandler("memeprediction", meme_prediction))
     app.add_handler(CommandHandler("ritual", ritual))
+    app.add_handler(CommandHandler("tyan", tyan))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
     
 
