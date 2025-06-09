@@ -1313,11 +1313,14 @@ chat_ids = set()
 last_horoscope_usage = {}
 number_game_active = {}
 number_game_number = {}
-story_games = {}  # chat_id: dict с ключами players, current_index, story, active
-# В начало файла, рядом с другими глобальными переменными добавим:
-cities_game_active = set()  # множество chat_id с активной игрой
-cities_used = {}  # chat_id: set(названий городов)
-cities_last_letter = {}  # chat_id: последняя буква для следующего города
+ story_games[chat_id] = {
+     "players": [user1, user2],
+     "current_index": 0,
+     "story": [],
+     "active": True/False
+ }
+
+
 
 async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
@@ -1384,82 +1387,65 @@ async def horoscope(update: Update, context: ContextTypes.DEFAULT_TYPE):
         message += f"▶️  {sign} ({dates}): {prediction}\n"
     await update.message.reply_text(message)
 
-async def join_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = update.effective_chat.id
-    user = update.effective_user
-
-    if chat_id not in story_games:
-        story_games[chat_id] = {
-            "players": [],
-            "current_index": 0,
-            "story": [],
-            "active": False
-        }
-
-    game = story_games[chat_id]
-
-    if user.id not in [u.id for u in game["players"]]:
-        game["players"].append(user)
-        await update.message.reply_text(f"{user.full_name} присоединился к истории!")
-
 async def start_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     game = story_games.get(chat_id)
 
     if not game or len(game["players"]) < 2:
-        await update.message.reply_text("Для начала игры нужно минимум 2 игрока.")
+        await update.message.reply_text("👥 Нужно хотя бы 2 игрока.")
         return
 
     game["active"] = True
     game["current_index"] = 0
     game["story"] = []
-    await send_turn_message(chat_id, context)
 
-async def send_turn_message(chat_id, context):
-    game = story_games[chat_id]
-    player = game["players"][game["current_index"]]
-    await context.bot.send_message(chat_id, f"Ход игрока: {player.full_name}. У тебя есть 1 минута, чтобы продолжить историю.")
+    current_player = game["players"][0]
+    await update.message.reply_text(f"📖 История началась!\n✏️ {current_player.full_name}, напиши первую фразу.")
+    
+async def next_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    game = story_games.get(chat_id)
 
-    # Установим таймер на 60 секунд
-    await asyncio.sleep(60)
+    if not game or not game["active"]:
+        await update.message.reply_text("❌ История сейчас неактивна.")
+        return
 
-    # Проверим, не был ли сделан ход
-    if len(game["story"]) <= game["current_index"]:
-        game["story"].append("(пропущено)")
-
-    await next_turn(chat_id, context)
-
-async def next_turn(chat_id, context):
-    game = story_games[chat_id]
     game["current_index"] += 1
-
     if game["current_index"] >= len(game["players"]):
-        game["active"] = False
-        full_story = " ".join(game["story"])
-        await context.bot.send_message(chat_id, f"История завершена:\n\n📖 {full_story}")
-        del story_games[chat_id]
-    else:
-        await send_turn_message(chat_id, context)
+        game["current_index"] = 0
 
+    next_player = game["players"][game["current_index"]]
+    await update.message.reply_text(f"✏️ Ходит: {next_player.full_name}")
+async def end_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    game = story_games.pop(chat_id, None)
+
+    if not game:
+        await update.message.reply_text("🚫 Нет активной истории.")
+        return
+
+    full_story = " ".join(game["story"])
+    await update.message.reply_text(f"📚 История завершена:\n\n{full_story}")
+async def reset_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    story_games.pop(chat_id, None)
+    await update.message.reply_text("♻️ История сброшена.")
 async def handle_story_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     user = update.effective_user
-    message = update.message.text
+    message = update.message.text.strip()
 
-    if chat_id in story_games:
-        game = story_games[chat_id]
-        if game["active"]:
-            current_player = game["players"][game["current_index"]]
-            if user.id == current_player.id:
-                game["story"].append(message)
-                await update.message.reply_text("✅ Добавлено в историю.")
-                await next_turn(chat_id, context)
-            else:
-                await update.message.reply_text("⛔ Сейчас не ваш ход.")
+    game = story_games.get(chat_id)
+    if game and game["active"]:
+        current_player = game["players"][game["current_index"]]
+        if user.id == current_player.id:
+            game["story"].append(message)
+            await update.message.reply_text("✅ Добавлено. Напишите /nextstory, чтобы передать ход.")
         else:
-            await track_user(update, context)
+            await update.message.reply_text("⛔ Сейчас не ваш ход.")
     else:
         await track_user(update, context)
+
 
 async def auto_post(app):
     await asyncio.sleep(10)
@@ -1492,6 +1478,10 @@ def main():
     app.add_handler(CommandHandler("memeprediction", meme_prediction))
     app.add_handler(CommandHandler("joinstory", join_story))
     app.add_handler(CommandHandler("startstory", start_story))
+    app.add_handler(CommandHandler("nextstory", next_story))
+    app.add_handler(CommandHandler("endstory", end_story))
+    app.add_handler(CommandHandler("resetstory", reset_story))
+
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_story_message))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
     
