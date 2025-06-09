@@ -1384,7 +1384,7 @@ async def horoscope(update: Update, context: ContextTypes.DEFAULT_TYPE):
         message += f"▶️  {sign} ({dates}): {prediction}\n"
     await update.message.reply_text(message)
 
-sync def join_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def join_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     user = update.effective_user
 
