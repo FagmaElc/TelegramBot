@@ -1439,9 +1439,7 @@ def main():
     app.add_handler(CommandHandler("Ball", ball))
     app.add_handler(CommandHandler("memeprediction", meme_prediction))
     app.add_handler(CommandHandler("numbergamestart", number_game_start))
-app.add_handler(CommandHandler("numbergamestop", number_game_stop))
-
-    
+    app.add_handler(CommandHandler("numbergamestop", number_game_stop))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, guess_number))
 
