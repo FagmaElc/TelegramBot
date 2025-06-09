@@ -1673,13 +1673,17 @@ _Обряд завершён. Баба Маня уходит в туман..._""
 async def send_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE, source):
     chat_id = update.effective_chat.id
     members_dict = chat_members.get(chat_id, {})
-    if len(members_dict) < 2:
-        await update.message.reply_text("Мне нужно хотя бы два человека в чате, чтобы составить предсказание!")
+    members_list = list(members_dict.values())
+
+    if len(members_list) == 0:
+        await update.message.reply_text("Я пока никого не вижу в чате. Напиши что-нибудь, чтобы я тебя запомнила 🔮")
         return
 
-    user1_id, user2_id = random.sample(list(members_dict.keys()), 2)
-    user1 = members_dict[user1_id]
-    user2 = members_dict[user2_id]
+    if len(members_list) == 1:
+        user1 = members_list[0]
+        user2 = user1  # просто подставим того же самого
+    else:
+        user1, user2 = random.sample(members_list, 2)
 
     template = random.choice(source)
     text = template.format(
@@ -1689,7 +1693,7 @@ async def send_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE, so
         user2_first_name=user2["first_name"]
     )
     await update.message.reply_text(text)
-
+    
 async def horoscope(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     now = datetime.datetime.now()
