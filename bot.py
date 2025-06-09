@@ -6,6 +6,7 @@ import datetime
 from flask import Flask
 from threading import Thread
 from telegram import Update
+from telegram.constants import ParseMode
 from telegram.ext import (
     ApplicationBuilder, CommandHandler, MessageHandler,
     ContextTypes, filters
@@ -23,6 +24,39 @@ def index():
 def run_flask():
     port = int(os.environ.get("PORT", 5000))
     flask_app.run(host="0.0.0.0", port=port)
+
+character_traits = [
+    "спокойный, но с огоньком внутри", "вспыльчивый, но честный",
+    "мудрый и уравновешенный", "непредсказуемый как лунный цикл",
+    "харизматичный лидер", "всегда в поиске смысла жизни",
+    "душа компании", "скрытный интроверт"
+]
+
+love_traits = [
+    "умеет любить сильно и навсегда", "боится привязанностей",
+    "открыт новым чувствам", "часто меняет партнёров, как носки",
+    "романтик с разбитым сердцем", "ищет идеальную половинку"
+]
+
+career_traits = [
+    "успешен и амбициозен", "ленится, но умён", "работает ради души",
+    "карьерист до мозга костей", "ищет своё призвание",
+    "всегда помогает коллегам", "строит бизнес в голове"
+]
+
+future_predictions = [
+    "ждёт взлёт — но сначала пара падений", "встретит важного человека",
+    "сменит профессию", "откроет своё дело", "переедет в другой город",
+    "поймёт, чего хочет на самом деле", "заработает кучу денег случайно"
+]
+
+attractiveness = [
+    "притягивает взгляды без усилий", "обаятелен, но не всегда это использует",
+    "внешность обманчива, но душа сияет", "стильный, как журнал мод",
+    "вызывает интерес у всех полов", "таинственность — его сила"
+]
+
+
 autopred = ["{user1_first_name}, сегодня ты встретишь знак, который изменит твою жизнь.",
     "Звёзды благосклонны к тебе, {user1_first_name}. Используй этот шанс!",
     "{user1_first_name}, не бойся сделать первый шаг — Вселенная на твоей стороне.",
@@ -1500,6 +1534,7 @@ predictionsTomorrow = [
 chat_members = {}
 chat_ids = set()
 last_horoscope_usage = {}
+last_ritual_usage = {}
 
 
 
@@ -1546,6 +1581,52 @@ async def love_ball(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, love)
 async def ball(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, Ball)
+from telegram.constants import ParseMode
+
+async def ritual(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    now = datetime.datetime.now()
+    last_used = last_ritual_usage.get(user_id)
+
+    if last_used and (now - last_used).total_seconds() < 86400:
+        await update.message.reply_text("🔒 Ты уже проводил обряд за последние 24 часа. Приходи позже.")
+        return
+
+    if not context.args:
+        await update.message.reply_text("👤 Укажи пользователя после команды. Пример:\n/ritual @username")
+        return
+
+    target_username = context.args[0]
+    if not target_username.startswith("@"):
+        await update.message.reply_text("⚠️ Укажи корректный @username.")
+        return
+
+    last_ritual_usage[user_id] = now
+
+    await update.message.reply_text("🔮 Баба Маня начала обряд... Медленно варит зелье...")
+
+    await asyncio.sleep(2)  # эффект обряда
+
+    character = random.choice(character_traits)
+    love = random.choice(love_traits)
+    career = random.choice(career_traits)
+    future = random.choice(future_predictions)
+    attract = random.choice(attractiveness)
+    score = random.randint(1, 10)
+
+    response = f"""🔮 *Магический анализ для {target_username}*:
+
+🧠 *Характер*: {character}
+❤️ *Любовь*: {love}
+💼 *Карьера*: {career}
+🔮 *Будущее*: {future}
+✨ *Привлекательность*: {attract}
+
+🏅 *Общая оценка*: *{score}/10*
+
+_Обряд завершён. Баба Маня уходит в туман..._"""
+
+    await update.message.reply_text(response, parse_mode=ParseMode.MARKDOWN)
 
 async def send_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE, source):
     chat_id = update.effective_chat.id
@@ -1618,6 +1699,7 @@ def main():
     app.add_handler(CommandHandler("horoscope", horoscope))
     app.add_handler(CommandHandler("Ball", ball))
     app.add_handler(CommandHandler("memeprediction", meme_prediction))
+    app.add_handler(CommandHandler("ritual", ritual))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
     
 
