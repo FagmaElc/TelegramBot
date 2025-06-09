@@ -1705,7 +1705,7 @@ _Обряд завершён. Баба Маня уходит в туман..._""
 async def send_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE, source):
     chat_id = update.effective_chat.id
     members_dict = chat_members.get(chat_id, {})
-    if len(members_dict) < 2:
+    if len(members_dict) < 1:
         await update.message.reply_text("Мне нужно хотя бы два человека в чате, чтобы составить предсказание!")
         return
 
