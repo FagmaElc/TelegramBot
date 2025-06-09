@@ -1513,10 +1513,10 @@ async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_members[chat_id] = {}
 
     chat_members[chat_id][user.id] = {
-        "first_name": user.first_name,
-        "username": f"@{user.username}" if user.username else user.full_name,
-        "full_name": user.full_name
-    }
+    "first_name": user.first_name,
+    "username": f"@{user.username}" if user.username else user.full_name,
+    "full_name": user.full_name
+}
     
 
 async def meme_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1588,16 +1588,21 @@ async def auto_post(app):
     await asyncio.sleep(10)
     while True:
         for chat_id in chat_ids:
-            members = list(chat_members.get(chat_id, []))
+            members = list(chat_members.get(chat_id, {}).values())
             if len(members) >= 2:
                 user1, user2 = random.sample(members, 2)
-                text = random.choice(autopred).format(user1=user1, user2=user2)
+
                 try:
+                    text = random.choice(autopred).format(
+                        user1=user1["username"],
+                        user2=user2["username"],
+                        user1_first_name=user1["first_name"],
+                        user2_first_name=user2["first_name"]
+                    )
                     await app.bot.send_message(chat_id=chat_id, text=f"🔮 Предсказание: {text}")
                 except Exception as e:
                     print(f"Ошибка при отправке в чат {chat_id}: {e}")
-        await asyncio.sleep(60)
-
+        await asyncio.sleep(120)
 def main():
     Thread(target=run_flask).start()
 
