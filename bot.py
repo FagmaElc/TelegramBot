@@ -1311,14 +1311,7 @@ predictionsTomorrow = [
 chat_members = {}
 chat_ids = set()
 last_horoscope_usage = {}
-number_game_active = {}
-number_game_number = {}
-story_games[chat_id] = {
-     "players": [user1, user2],
-     "current_index": 0,
-     "story": [],
-     "active": True/False
- }
+
 
 
 
@@ -1387,65 +1380,6 @@ async def horoscope(update: Update, context: ContextTypes.DEFAULT_TYPE):
         message += f"▶️  {sign} ({dates}): {prediction}\n"
     await update.message.reply_text(message)
 
-async def start_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = update.effective_chat.id
-    game = story_games.get(chat_id)
-
-    if not game or len(game["players"]) < 2:
-        await update.message.reply_text("👥 Нужно хотя бы 2 игрока.")
-        return
-
-    game["active"] = True
-    game["current_index"] = 0
-    game["story"] = []
-
-    current_player = game["players"][0]
-    await update.message.reply_text(f"📖 История началась!\n✏️ {current_player.full_name}, напиши первую фразу.")
-    
-async def next_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = update.effective_chat.id
-    game = story_games.get(chat_id)
-
-    if not game or not game["active"]:
-        await update.message.reply_text("❌ История сейчас неактивна.")
-        return
-
-    game["current_index"] += 1
-    if game["current_index"] >= len(game["players"]):
-        game["current_index"] = 0
-
-    next_player = game["players"][game["current_index"]]
-    await update.message.reply_text(f"✏️ Ходит: {next_player.full_name}")
-async def end_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = update.effective_chat.id
-    game = story_games.pop(chat_id, None)
-
-    if not game:
-        await update.message.reply_text("🚫 Нет активной истории.")
-        return
-
-    full_story = " ".join(game["story"])
-    await update.message.reply_text(f"📚 История завершена:\n\n{full_story}")
-async def reset_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = update.effective_chat.id
-    story_games.pop(chat_id, None)
-    await update.message.reply_text("♻️ История сброшена.")
-async def handle_story_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = update.effective_chat.id
-    user = update.effective_user
-    message = update.message.text.strip()
-
-    game = story_games.get(chat_id)
-    if game and game["active"]:
-        current_player = game["players"][game["current_index"]]
-        if user.id == current_player.id:
-            game["story"].append(message)
-            await update.message.reply_text("✅ Добавлено. Напишите /nextstory, чтобы передать ход.")
-        else:
-            await update.message.reply_text("⛔ Сейчас не ваш ход.")
-    else:
-        await track_user(update, context)
-
 
 async def auto_post(app):
     await asyncio.sleep(10)
@@ -1476,13 +1410,6 @@ def main():
     app.add_handler(CommandHandler("horoscope", horoscope))
     app.add_handler(CommandHandler("Ball", ball))
     app.add_handler(CommandHandler("memeprediction", meme_prediction))
-    app.add_handler(CommandHandler("joinstory", join_story))
-    app.add_handler(CommandHandler("startstory", start_story))
-    app.add_handler(CommandHandler("nextstory", next_story))
-    app.add_handler(CommandHandler("endstory", end_story))
-    app.add_handler(CommandHandler("resetstory", reset_story))
-
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_story_message))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
     
 
