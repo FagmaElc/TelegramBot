@@ -1602,7 +1602,7 @@ async def auto_post(app):
                     await app.bot.send_message(chat_id=chat_id, text=f"🔮 Предсказание: {text}")
                 except Exception as e:
                     print(f"Ошибка при отправке в чат {chat_id}: {e}")
-        await asyncio.sleep(120)
+        await asyncio.sleep(3600)
 def main():
     Thread(target=run_flask).start()
 
