@@ -1353,7 +1353,7 @@ async def meme_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_photo(photo=meme_url, caption="🔮 Мемное-предсказание от Бабы Мани")
     
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Привет! Меня зовут Баба Маня. Напиши /prediction или /lovestory, чтобы узнать судьбу! Список комманд: /start - инструкция по боту /prediction - предсказание на будущее /predictiontomorrow - Предсказание на завтра /predictiontoday - Предсказание на сегодня /numbergamestart - Игра в Числа/numbergamestop - Стоп игры в числа /startgamewpinc - Начать игру "Угадай участника" /stopgamewpinc - Закончить игру "Угадай участника" /lovestory - Баба Маня сделает приворот на 2х пользователей чата. /loveball - Баба Маня использует магию любви 💘 /citiesgame - игра в города /horoscope - гороскоп для всех знаков /ball - Шар Судьбы /memeprediction - Мемное-предсказание(TKACH MAX - developer)")
+    await update.message.reply_text("Привет! Меня зовут Баба Маня. Напиши /prediction или /lovestory, чтобы узнать судьбу! TKACH MAX - developer")
     
 async def prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, predictions)
