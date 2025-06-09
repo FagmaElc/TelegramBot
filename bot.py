@@ -27,6 +27,58 @@ predictions = [
     "Между {user1} и {user2} пробежит искра... или метеорит.",
     # ...
 ]
+meme_urls = [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4FUsYSFen8jfPJ2s1u1iaK1t2RZ-nqmpwpg&s",
+    "https://socialair.ru/files/article/52/12.jpg.preview.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnTgLIKbFpib0CuhJApoc4qi0z7l18ceKubQ&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFjTrx3Sghi3v7otYXd3eQeQSI_DpJonWDLg&s",
+    "https://infoglaz.ru/wp-content/uploads/1387527274_001.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoZAEd6_CxHykSJ_m0wN0_KueiDAULE-P8vwPR7wLqNbPuWkZTq-GglDvtBP5OaCV6cKQ&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAbd4PZkRKM4MMKNQr4vqxDWQCU6yjXFGRfg&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJl8qS1xvUwX5-tI5Yg_WkywOMSKxb8DHFLhVYZ-6vc7LKQJzpUiX3mxiblEUzLXFqKWY&usqp=CAU",
+    "https://www.caravan.kz/wp-content/uploads/images/636716.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQj-UBxwLuQtYdHmoTRRjwpv-SsDPPhowD9Ah03JZ2uC8Ce-361F6SCZYR2XfitM0DzhUY&usqp=CAU",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaNsh2k_rcIFcF5MKTBqB2LuPdt6S5ceRYZg&s",
+    "https://news.store.rambler.ru/img/8216a3fa1bdcc02143a78295811e74ac?img-format=auto&img-1-resize=height:400,fit:max&img-2-filter=sharpen",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEWcPq2NQCBEV1gz-9_ie_2UwYaljGMRV_4g&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkKeslvAeLPP_t2ZKuMCNBoWdWqAJiqWAGbg&s",
+    "https://i.pinimg.com/236x/30/71/e4/3071e4bf21d3c8d4c126128fa0ce1c9a.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-yZuuNcBoKi1czNljT792wXA-hW2GQqQJng&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS94nv5ndZrXH_dklUctyIbp916IXmSKh0mgw&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2YLZlPIc2QfkfbbmQJoT8PJdcD2w5tx7aJA&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-Ise81ESEPIZbUJlpC38pe8RzWe9nYDgXw&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRp6UcxFqnTsZ0XQMrdGXEeftyFic5Pb8kHSXE1-C4kzHS93heFy5CLDr2KuY_TUAU4kY4&usqp=CAU",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdfM8NhLRUNiHnmlgYMqHBi7DM94SuBCfqhg&s",
+    "https://gorodtest.ru/site/assets/files/1308/oblozhka__vnutri_testa__sait.webp",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCsQGzaJN53rjs2mPq3WUnNo-esYduPvUBCw&s",
+    "https://media.nazaccent.ru/cache/fe/f9/fef909537eae125277188540b5ce11b4.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7HK__doxiNk7_QYUvH-JIXdwuidKM_K5HMEGLjY5gQY3NQj6ggKJeI0hSJEBA_JpIpbY&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUILAweEL5s8c6mtl9EC18Dz-R3QaT3KXZqg&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTepC-NynOnAVAb6ol8QVUyqPOwPkCNYx36yAaEA2pY9UJ1rgKui5I2VWFE4WUQwDkbvBc&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4ybqJ6fgN8KQIuyI25S2Q61z-EafJVnIZ0g&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHcaI627zhHeJOL9Sip7GvReHn24GdPkNA_JiuZ8_8M18X6Sg5hnncoH0Buovs9syYJxU&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvPQvJhcv-XrZpD53xhERbdPa0fQbCN4ridQ&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjdWb-f69SueqKnEmMVaF5O_WwsvW-9N91ww&s",
+    "https://assets-webflow.ngcdn.ru/cdn.prod/6294b12fe96345a83876d4a5/679a74cd5ad357003454ab28_AD_4nXeIhrbdtKZhMs73Y3ls0QBVrPc_X9k81k_lpnYyt9wOdJ0HFPHrwgFWJuEJnj6XgqQug1z3jIzTn5BFRvqnk62c59PfSohRC5iO61Lec17gAvN5AGbCvBmkL61A-Kt-PCzb_jNa.png",
+    "https://assets-webflow.ngcdn.ru/cdn.prod/6294b12fe96345a83876d4a5/679a74cc999e05566bf731b8_AD_4nXeg43M7SIPfOAMpbd-ozipf7aXKaanhbKMcxAk_4GFLTUFTY6wTD_i_IQUDf-wxvjnYerHTxVgQ3KZM8PBZbq812kvXehX1M_s7PwPwHysF-_iveZ1Df9I5mc_DCUr1XZ6X1bCH3w.jpeg",
+    "https://i.pinimg.com/236x/4f/82/50/4f82500a7682cd8863df7dcd3b0faeff.jpg",
+    "https://cdn.trinixy.ru/pics6/20250110/255906_1_trinixy_ru.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsHW6nbFaCp3R62RbIou4X8gW6qvCxpy3iNA&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9yWyhGNL_uvZptn6xEfWMyUa4txnzul3EZQ&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPLZJpnXsZyoibUSnlkgl_Fo5qVjksUGEgpA&s",
+    "https://image1.thematicnews.com/uploads/images/05/67/30/2024/12/30/768f7f.jpg",
+    "https://baltija.eu/wp-content/uploads/2025/05/memy-s-kotami-2025-smeshnye-populjarnye-foto-s-nadpisjami-43aee72.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcZgKLqAH2Hw9s2TRr9TQynmmGThbrqPbRtg&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4vcj5IqntM53hPoM5dgvPI6asbSmuGfuDaQ&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7s9BjKjroMT0inzTwJu4potAcaXL6haoTRQ&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy2K0ddmut4cVSgH3SVNPPs1FLpCpDSmRb8w&s",
+    "https://baltija.eu/wp-content/uploads/2025/05/memy-s-kotami-2025-smeshnye-populjarnye-foto-s-nadpisjami-4b95674.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvr_9FB4rTXZDKfjVIYGWwHDqa9JCkJeoGYA&s",
+    "https://opis-cdn.tinkoffjournal.ru/mercury/welcome-to-2025-10.png",
+    "https://www.anekdot.ru/i/caricatures/normal/25/1/8/1736366786.jpg",
+    "https://www.anekdot.ru/i/caricatures/normal/23/10/31/1698744076.jpg",
+    "https://resizer.mail.ru/p/179f6664-92be-5fa3-9965-78c98c5259ef/AQAKKOyH7-AG5h6QXZwN833hnSbd_MHIdRG2X6eF9N9gM2O7SzK06vK_0F3_d5acuxvEXH3ftPhZEArF82aVVNwMgec.jpg",
+]
 love = [
         "{user1} тайно хочет, чтобы {user2} прикоснулся к его/её руке именно сегодня.",
     "{user2} сегодня не сможет устоять перед обаянием {user1} — звёзды на их стороне.",
@@ -665,7 +717,15 @@ async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_members[chat_id] = set()
     username = f"@{user.username}" if user.username else user.full_name
     chat_members[chat_id].add(username)
+    
+async def meme_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not meme_urls:
+        await update.message.reply_text("Мемов нет, но духи говорят, что ты прекрасен 💫")
+        return
 
+    meme_url = random.choice(meme_urls)
+    await update.message.reply_photo(photo=meme_url, caption="🔮 Мем-предсказание от Бабы Мани")
+    
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Привет! Я Баба Маня. Напиши /prediction или /lovestory, чтобы узнать судьбу!")
 
@@ -736,6 +796,7 @@ def main():
     app.add_handler(CommandHandler("loveball", love_ball))
     app.add_handler(CommandHandler("horoscope", horoscope))
     app.add_handler(CommandHandler("Ball", ball))
+    app.add_handler(CommandHandler("memeprediction", meme_prediction))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
 
     async def after_startup(app):
