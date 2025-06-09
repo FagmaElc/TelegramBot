@@ -1310,6 +1310,10 @@ chat_ids = set()
 last_horoscope_usage = {}
 number_game_active = {}
 number_game_number = {}
+# В начало файла, рядом с другими глобальными переменными добавим:
+cities_game_active = set()  # множество chat_id с активной игрой
+cities_used = {}  # chat_id: set(названий городов)
+cities_last_letter = {}  # chat_id: последняя буква для следующего города
 
 async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
@@ -1371,6 +1375,77 @@ async def love_ball(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, love)
 async def ball(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, Ball)
+# Добавим обработчики команд:
+async def cities_game_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    cities_game_active.add(chat_id)
+    cities_used[chat_id] = set()
+    cities_last_letter[chat_id] = None
+    await update.message.reply_text("🗺️ Игра в города началась! Назовите любой город, чтобы начать игру.")
+
+async def cities_game_stop(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    if chat_id in cities_game_active:
+        cities_game_active.remove(chat_id)
+        cities_used.pop(chat_id, None)
+        cities_last_letter.pop(chat_id, None)
+        await update.message.reply_text("🛑 Игра в города остановлена.")
+    else:
+        await update.message.reply_text("Игра в города не запущена.")
+# Функция обработки сообщений во время игры
+async def cities_game_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    if chat_id not in cities_game_active:
+        return  # Игра не активна, ничего не делаем
+
+    city = update.message.text.strip().lower()
+    # Уберем мягкий знак и другие знаки в конце
+    def last_letter(city_name):
+        for ch in reversed(city_name):
+            if ch.isalpha() and ch not in ['ь', 'ъ', 'ы']:
+                return ch
+        return None
+
+    # Проверим, что город не был использован
+    if city in cities_used[chat_id]:
+        await update.message.reply_text("Этот город уже называли, попробуйте другой.")
+        return
+
+    # Проверим правильность первой буквы (если это не первый ход)
+    last_letter_required = cities_last_letter[chat_id]
+    if last_letter_required and city[0] != last_letter_required:
+        await update.message.reply_text(f"Нужно назвать город на букву '{last_letter_required.upper()}'. Попробуйте снова.")
+        return
+
+    # Примем город
+    cities_used[chat_id].add(city)
+    last_char = last_letter(city)
+    cities_last_letter[chat_id] = last_char
+
+    # Бот выбирает ответный город
+    # Для простоты возьмём из заранее заготовленного списка городов
+    all_cities = [
+        "москва", "анапа", "архангельск", "калуга", "ярославль", "липецк",
+        "краснодар", "ростов", "владивосток", "курск", "санкт-петербург",
+        "грозный", "новгород", "дагестан", "нижний новгород", "омск",
+        "кострома", "иваново", "орел", "лесосибирск", "казань", "ямал"
+    ]
+
+    # Исключим уже использованные
+    possible_cities = [c for c in all_cities if c not in cities_used[chat_id] and c.startswith(last_char)]
+
+    if not possible_cities:
+        await update.message.reply_text("Я не могу придумать город на эту букву. Вы выиграли! 🎉")
+        cities_game_active.remove(chat_id)
+        cities_used.pop(chat_id, None)
+        cities_last_letter.pop(chat_id, None)
+        return
+
+    bot_city = random.choice(possible_cities)
+    cities_used[chat_id].add(bot_city)
+    cities_last_letter[chat_id] = last_letter(bot_city)
+
+    await update.message.reply_text(f"Ваш ход принят: {city.capitalize()}\nМой ход: {bot_city.capitalize()}\nТеперь ваш город на букву '{cities_last_letter[chat_id].upper()}'")
 
 async def send_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE, source):
     chat_id = update.effective_chat.id
@@ -1440,6 +1515,9 @@ def main():
     app.add_handler(CommandHandler("memeprediction", meme_prediction))
     app.add_handler(CommandHandler("numbergamestart", number_game_start))
     app.add_handler(CommandHandler("numbergamestop", number_game_stop))
+    app.add_handler(CommandHandler("citiesgame", cities_game_start))
+    app.add_handler(CommandHandler("stopcitiesgame", cities_game_stop))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, cities_game_handler))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, guess_number))
 
