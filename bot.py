@@ -1308,6 +1308,8 @@ predictionsTomorrow = [
 chat_members = {}
 chat_ids = set()
 last_horoscope_usage = {}
+number_game_active = {}
+number_game_number = {}
 
 async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
@@ -1319,6 +1321,29 @@ async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     username = f"@{user.username}" if user.username else user.full_name
     chat_members[chat_id].add(username)
     
+async def guess_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    if not number_game_active.get(chat_id):
+        return  # Если игра не активна, игнорируем
+
+    try:
+        guess = int(update.message.text.strip())
+    except ValueError:
+        return  # Если это не число — игнорируем
+
+    target = number_game_number.get(chat_id)
+    if not target:
+        return
+
+    if guess < target:
+        await update.message.reply_text("🔼 Больше!")
+    elif guess > target:
+        await update.message.reply_text("🔽 Меньше!")
+    else:
+        await update.message.reply_text(f"🎉 Угадал(а)! Загаданное число было {target}!")
+        number_game_active.pop(chat_id)
+        number_game_number.pop(chat_id)
+
 async def meme_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not meme_urls:
         await update.message.reply_text("Мемов нет, но духи говорят, что ты прекрасен 💫")
@@ -1386,6 +1411,17 @@ async def auto_post(app):
                 except Exception as e:
                     print(f"Ошибка при отправке в чат {chat_id}: {e}")
         await asyncio.sleep(300)
+async def number_game_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    number_game_active[chat_id] = True
+    number_game_number[chat_id] = random.randint(1, 1000)
+    await update.message.reply_text("🔢 Я загадала число от 1 до 1000. Попробуйте угадать!")
+
+async def number_game_stop(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    number_game_active.pop(chat_id, None)
+    number_game_number.pop(chat_id, None)
+    await update.message.reply_text("🛑 Баба Маня остановила игру 'Угадай число'.")
 
 def main():
     Thread(target=run_flask).start()
@@ -1402,7 +1438,14 @@ def main():
     app.add_handler(CommandHandler("horoscope", horoscope))
     app.add_handler(CommandHandler("Ball", ball))
     app.add_handler(CommandHandler("memeprediction", meme_prediction))
+    app.add_handler(CommandHandler("numbergamestart", number_game_start))
+app.add_handler(CommandHandler("numbergamestop", number_game_stop))
+
+    
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, guess_number))
+
+
 
     async def after_startup(app):
         asyncio.create_task(auto_post(app))
