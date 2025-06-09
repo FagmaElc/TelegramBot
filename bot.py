@@ -26,7 +26,13 @@ def index():
 def run_flask():
     port = int(os.environ.get("PORT", 5000))
     flask_app.run(host="0.0.0.0", port=port)
-
+solo_predictions = [
+    "{user1_first_name}, духи шепчут тебе: всё возможно, если ты веришь в себя.",
+    "{user1_first_name}, сегодня удача обнимет тебя крепко — будь готов!",
+    "Звёзды говорят, что {user1_first_name} — центр своей вселенной. Верь в это.",
+    "{user1_first_name}, Баба Маня видит успех на горизонте. Главное — не сиди сложа руки!",
+    "{user1_first_name}, ты сам себе и любовь, и судьба сегодня 💫"
+]
 character_traits = [
     "спокойный, но с огоньком внутри", "вспыльчивый, но честный",
     "мудрый и уравновешенный", "непредсказуемый как лунный цикл",
@@ -1676,24 +1682,29 @@ async def send_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE, so
     members_list = list(members_dict.values())
 
     if len(members_list) == 0:
-        await update.message.reply_text("Я пока никого не вижу в чате. Напиши что-нибудь, чтобы я тебя запомнила 🔮")
+        await update.message.reply_text(
+            "Я пока никого не вижу в чате. Напиши что-нибудь, чтобы я тебя запомнила 🔮"
+        )
         return
 
     if len(members_list) == 1:
         user1 = members_list[0]
-        user2 = user1  # просто подставим того же самого
+        template = random.choice(solo_predictions)
+        text = template.format(
+            user1=user1["username"],
+            user1_first_name=user1["first_name"]
+        )
     else:
         user1, user2 = random.sample(members_list, 2)
+        template = random.choice(source)
+        text = template.format(
+            user1=user1["username"],
+            user2=user2["username"],
+            user1_first_name=user1["first_name"],
+            user2_first_name=user2["first_name"]
+        )
 
-    template = random.choice(source)
-    text = template.format(
-        user1=user1["username"],
-        user2=user2["username"],
-        user1_first_name=user1["first_name"],
-        user2_first_name=user2["first_name"]
-    )
     await update.message.reply_text(text)
-    
 async def horoscope(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     now = datetime.datetime.now()
