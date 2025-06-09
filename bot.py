@@ -24,7 +24,7 @@ def run_flask():
 # --- Telegram логика ---
 
 # Обычные предсказания
-predictions = [
+predictions_today = [
     "{user1} и {user2} сегодня объединятся ради великой цели.",
     "Между {user1} и {user2} пробежит искра... или метеорит.",
     "{user1} узнает страшную тайну о {user2}.",
@@ -33,6 +33,17 @@ predictions = [
     "{user1} и {user2} — идеальная команда. Почти.",
     "{user1} сегодня наступит на ногу {user2}. Береги ноги!",
     "{user1} и {user2} не забудут этот день никогда.",
+]
+
+# Завтрашние предсказания
+predictions_tomorrow = [
+    "{user1} и {user2} завтра попадут в странную ситуацию.",
+    "Завтра {user1} подумает о {user2} слишком часто.",
+    "У {user1} и {user2} завтра появится общий враг.",
+    "{user1} и {user2} устроят завтрашний флешмоб.",
+    "{user1} нечаянно позвонит {user2} завтра ночью.",
+    "{user1} и {user2} неожиданно прославятся завтра.",
+    "{user1} завтра случайно откроет секрет {user2}.",
 ]
 
 # Любовные предсказания
@@ -45,6 +56,15 @@ love_predictions = [
     "{user1} и {user2} — идеальная парочка. Ну, почти 😏",
     "{user1} напишет роман про {user2}, но не признается 🤫",
     "{user1} и {user2} поедут вместе в отпуск... во сне 🏖️",
+]
+
+# Откровенные любовные предсказания
+spicy_love_predictions = [
+    "{user1} и {user2} — горячая смесь страсти и интриг 🔥🔥",
+    "{user1} и {user2} устроят свидание, которое никто не забудет 💋",
+    "{user1} посмотрит на {user2} иначе... и понравится 😉",
+    "{user1} напишет {user2} сообщение, которое вызовет бурю эмоций 😘",
+    "{user1} и {user2}... ну вы поняли 😏",
 ]
 
 chat_members = {}
@@ -63,13 +83,29 @@ async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_members[chat_id].add(username)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Привет! Я Баба Маня. Напиши /prediction или /lovestory, чтобы узнать судьбу!")
+    await update.message.reply_text(
+        "Привет! Я Баба Маня. Вот что я умею:\n"
+        "/prediction — обычное предсказание\n"
+        "/lovestory — романтическое предсказание\n"
+        "/predictiontoday — предсказание на сегодня\n"
+        "/predictiontomorrow — предсказание на завтра\n"
+        "/loveball — откровенное любовное предсказание"
+    )
 
 async def prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await send_prediction(update, context, predictions)
+    await send_prediction(update, context, predictions_today)
+
+async def prediction_today(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await send_prediction(update, context, predictions_today)
+
+async def prediction_tomorrow(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await send_prediction(update, context, predictions_tomorrow)
 
 async def love_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, love_predictions)
+
+async def love_ball(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await send_prediction(update, context, spicy_love_predictions)
 
 async def send_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE, source):
     chat_id = update.effective_chat.id
@@ -88,7 +124,7 @@ async def auto_post(app):
             members = list(chat_members.get(chat_id, []))
             if len(members) >= 2:
                 user1, user2 = random.sample(members, 2)
-                text = random.choice(predictions).format(user1=user1, user2=user2)
+                text = random.choice(predictions_today).format(user1=user1, user2=user2)
                 try:
                     await app.bot.send_message(chat_id=chat_id, text=f"🔮 Предсказание: {text}")
                 except Exception as e:
@@ -103,7 +139,10 @@ def main():
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("prediction", prediction))
+    app.add_handler(CommandHandler("predictiontoday", prediction_today))
+    app.add_handler(CommandHandler("predictiontomorrow", prediction_tomorrow))
     app.add_handler(CommandHandler("lovestory", love_story))
+    app.add_handler(CommandHandler("loveball", love_ball))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
 
     async def after_startup(app):
