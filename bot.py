@@ -602,6 +602,55 @@ zodiac_signs = {
     "♒️Водолей": "20.01–18.02",
     "♓️Рыбы": "19.02–20.03"
 }
+Ball = [
+    "Бесспорно.",
+    "Скорее да, чем нет.",
+    "Ответ туманен, попробуй снова.",
+    "Сосредоточься и спроси ещё раз.",
+    "Перспективы не очень хорошие.",
+    "Да, определённо!",
+    "Весьма вероятно.",
+    "Не рассчитывай на это.",
+    "Сейчас нельзя предсказать.",
+    "Даже не думай об этом.",
+    "Сигналы указывают на «да».",
+    "Лучше подожди.",
+    "Возможно, но не сейчас.",
+    "Это точно случится.",
+    "Ты слишком оптимистичен.",
+    "Будь готов к неожиданностям.",
+    "Вопрос спорный, подумай ещё.",
+    "Судьба благоволит тебе.",
+    "Не стоит торопить события.",
+    "Ты сам хозяин своей судьбы.",
+    "Звёзды не на твоей стороне.",
+    "Время работает на тебя.",
+    "Шанс есть, не упусти его.",
+    "Не самое лучшее время для этого.",
+    "Удача на твоей стороне.",
+    "Рискни — не пожалеешь.",
+    "Лучше оставь это на потом.",
+    "Наступают перемены.",
+    "Твои усилия будут вознаграждены.",
+    "Избегай поспешных решений.",
+    "Скоро всё станет яснее.",
+    "Нужно быть осторожнее.",
+    "Ответ положительный.",
+    "Будь терпеливым, и всё сработает.",
+    "Не стоит сегодня принимать важные решения.",
+    "Тебе повезёт, если не упустишь шанс.",
+    "Жди сюрпризов.",
+    "Положись на интуицию.",
+    "Не откладывай на завтра то, что можно сделать сегодня.",
+    "Появится возможность, используй её.",
+    "Твой план сработает.",
+    "Лучшее ещё впереди.",
+    "Верь в себя — и всё получится.",
+    "Сегодня не время для экспериментов.",
+    "Действуй решительно.",
+    "Тебя ждёт успех.",
+    "Скоро наступит период перемен.",
+]
 
 chat_members = {}
 chat_ids = set()
@@ -631,6 +680,8 @@ async def love_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def love_ball(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, love)
+async def ball(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await send_prediction(update, context, Ball)
 
 async def send_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE, source):
     chat_id = update.effective_chat.id
@@ -684,6 +735,7 @@ def main():
     app.add_handler(CommandHandler("lovestory", love_story))
     app.add_handler(CommandHandler("loveball", love_ball))
     app.add_handler(CommandHandler("horoscope", horoscope))
+    app.add_handler(CommandHandler("Ball", ball))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
 
     async def after_startup(app):
