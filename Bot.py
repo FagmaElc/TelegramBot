@@ -1,4 +1,5 @@
 import random
+import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 
@@ -67,7 +68,8 @@ async def send_duo_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 # Основной запуск бота
 def main():
-    TOKEN = "7765367732:AAETJhAd1qvj5Qha8i8CSlBe2vs-XJvXGr4"  # Замени токен на свой
+    
+    TOKEN = os.environ["BOT_TOKEN"] # Замени токен на свой
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
