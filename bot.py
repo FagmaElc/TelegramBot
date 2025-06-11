@@ -34,6 +34,49 @@ solo_predictions = [
     "{user1_first_name}, Баба Маня видит успех на горизонте. Главное — не сиди сложа руки!",
     "{user1_first_name}, ты сам себе и любовь, и судьба сегодня 💫"
 ]
+vibe = [
+    "https://eu.hitmo-top.com/get/music/20220603/ANNA_ASTI_-_Po_baram_74376135.mp3",
+    "https://eu.hitmo-top.com/get/music/20220624/ANNA_ASTI_-_Povelo_74517145.mp3",
+    "https://eu.hitmo-top.com/get/music/20221122/JONY_ANNA_ASTI_-_Kak_lyubov_tvoyu_ponyat_75107960.mp3",
+    "https://eu.hitmo-top.com/get/music/20190503/NILETTO_-_Lyubimka_63911927.mp3",
+    "https://eu.hitmo-top.com/get/music/20190308/Artur_Pirozhkov_-_Zacepila_62633997.mp3",
+    "https://eu.hitmo-top.com/get/music/20190306/HammAli_Navai_-_Devochka-vojjna_62592480.mp3",
+    "https://eu.hitmo-top.com/get/music/20190927/Zivert_-_Credo_66751495.mp3",
+    "https://eu.hitmo-top.com/get/music/20190823/Maks_Korzh_-_2_tipa_lyudejj_66225125.mp3",
+    "https://eu.hitmo-top.com/get/music/20191005/GAYAZOV_BROTHER_-_Uvezite_menya_na_Dip-khaus_66849050.mp3",
+    "https://eu.hitmo-top.com/get/music/20190116/Basta_Skriptonit_Diana_Arbenina_SunSay_Sergejj_Bobunec_Aleksandr_Sklyar_-_Sansara_61448210.mp3",
+    "https://eu.hitmo-top.com/get/music/20180425/Kino_-_KHochu_peremen_55527255.mp3",
+    "https://eu.hitmo-top.com/get/music/20181114/2Mashi_-_Mama_ya_tancuyu_60292807.mp3",
+    "https://eu.hitmo-top.com/get/music/20181026/Tima_Belorusskikh_-_Nezabudka_59932823.mp3",
+    "https://eu.hitmo-top.com/get/music/20210610/Galibri_Mavik_-_ederiko_ellini_72996516.mp3",
+    "https://eu.hitmo-top.com/get/music/20210421/DEAD_BLONDE_-_Malchik_na_devyatke_72919856.mp3",
+    "https://eu.hitmo-top.com/get/music/20210625/Filatov_Karas_Mumijj_Troll_-_Amore_More_Goodbye_73016028.mp3",
+    "https://eu.hitmo-top.com/get/music/20211029/Lyusya_CHebotina_-_SOLNCE_MONAKO_73236442.mp3",
+    "https://eu.hitmo-top.com/get/music/20200611/Klava_Koka_-_Krash_69883827.mp3",
+    "https://eu.hitmo-top.com/get/music/20200619/HENSY_-_Pobolelo_i_proshlo_69974017.mp3",
+    "https://eu.hitmo-top.com/get/music/20200220/Klava_Koka_-_Pokinula_chat_68462517.mp3",
+    "https://eu.hitmo-top.com/get/music/20200319/PIZZA_-_Ulybka_68824688.mp3",
+    "https://eu.hitmo-top.com/get/music/20200924/Anet_Sajj_-_SLJOZY_71033620.mp3",
+    "https://eu.hitmo-top.com/get/music/20170830/Gradusy_-_Rezhisser_47837710.mp3",
+    "https://eu.hitmo-top.com/get/music/20191116/Little_Big_-_Go_Bananas_67300195.mp3",
+    "https://eu.hitmo-top.com/get/music/20190710/Artur_Pirozhkov_-_Alkogolichka_65347607.mp3",
+    "https://eu.hitmo-top.com/get/music/20190728/Mari_Krajjmbreri_-_Mne_tak_khorosho_65738008.mp3",
+    "https://eu.hitmo-top.com/get/music/20200828/dora_-_Vtyurilas_70734316.mp3",
+    "https://eu.hitmo-top.com/get/music/20200410/Cream_Soda_KHleb_-_Plachu_na_tekhno_69139877.mp3",
+    "https://eu.hitmo-top.com/get/music/20200313/Little_Big_-_UNO_68748523.mp3",
+    "https://eu.hitmo-top.com/get/music/20200517/Dabro_-_YUnost_69577931.mp3",
+    "https://eu.hitmo-top.com/get/music/20170902/ZHuki_-_Batarejjka_47951478.mp3",
+    "https://eu.hitmo-top.com/get/music/20171023/2Mashi_-_Bosaya_49872796.mp3",
+    "https://eu.hitmo-top.com/get/music/20180330/RASA_-_Pod_fonarjom_54937115.mp3",
+]
+caption = [
+    "Я думаю эта песня тебя описывает:",
+    "Эта песня описывает твой день:",
+    "Эта песня описывает твой день завтра",
+    "От тебя исходит атмосфера этой песни:",
+    "Я думаю твой характер может описать эта песня:",
+    "Я думаю эта песня описывавает твое будущее:",
+]
 character_traits = [
     "спокойный, но с огоньком внутри", "вспыльчивый, но честный",
     "мудрый и уравновешенный", "непредсказуемый как лунный цикл",
@@ -1860,6 +1903,14 @@ async def meme_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     meme_url = random.choice(meme_urls)
     await update.message.reply_photo(photo=meme_url, caption="🔮 Мемное-предсказание от Бабы Мани")
+
+async def mus_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not meme_urls:
+        await update.message.reply_text("Музыки нет, но духи говорят, что ты прекрасен(а) 💫")
+        return
+
+    meme_url = random.choice(vibe)
+    await update.message.reply_photo(photo=meme_url, caption=random.choice(caption)
     
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Привет! Меня зовут Баба Маня. Напиши /prediction или /lovestory, чтобы узнать судьбу! TKACH MAX - developer. Обновление 11.06: 1.Гороскоп теперь не доступен, теперь он будет приходить 1 раз в день в чат! 2.Добавлена игра Правда или действие, с вожностью добавлять свои вопросы и действия! 3.Добавлена возможность включать и отключать автопредсказания! 4.Добавлены мемы в мемные-предсказания - списибо Викусе за помощь!")
@@ -2074,6 +2125,7 @@ def main():
     app.add_handler(CommandHandler("loveball", love_ball))
     app.add_handler(CommandHandler("Ball", ball))
     app.add_handler(CommandHandler("memeprediction", meme_prediction))
+    app.add_handler(CommandHandler("musicprediction", mus_prediction))
     app.add_handler(CommandHandler("ritual", ritual))
     app.add_handler(CommandHandler("tyan", tyan))
     app.add_handler(CommandHandler("disable_autopost", disable_autopost))
