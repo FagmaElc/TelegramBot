@@ -697,18 +697,46 @@ meme_urls = [
     "https://i.pinimg.com/736x/af/02/58/af0258604a2086ef7a76e0876219cc75.jpg",
     "https://i.pinimg.com/736x/8c/34/fa/8c34fa41cacb16eccd2e573a8c878271.jpg",
     "https://i.pinimg.com/736x/00/66/50/006650cf68c4a48d3c593ee469b531d2.jpg",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
+    "https://i.pinimg.com/736x/d2/c6/b4/d2c6b44e33ad290a5793001cfd889f31.jpg",
+    "https://i.pinimg.com/736x/4a/c2/d6/4ac2d60c41e544b88f897552b3d2bad4.jpg",
+    "https://i.pinimg.com/736x/a1/5d/4c/a15d4c26e2a6468730d649d85399d218.jpg",
+    "https://i.pinimg.com/736x/51/86/6a/51866ab7626e166b7b09e1902e1cb6e2.jpg",
+    "https://i.pinimg.com/736x/24/4d/09/244d09a80ae28225808cda4cd2cc26a1.jpg",
+    "https://i.pinimg.com/736x/58/65/49/5865492f6e87b3a8ea5c967faaec92e6.jpg",
+    "https://i.pinimg.com/736x/46/13/5d/46135d225b44bac285bc91d9b845f78f.jpg",
+    "https://i.pinimg.com/736x/c2/71/19/c271197a878a50d4cfab3666d2b52bc6.jpg",
+    "https://i.pinimg.com/736x/14/8f/cf/148fcfe1dd766135bd2e52136aa8e9a8.jpg",
+    "https://i.pinimg.com/736x/44/da/3d/44da3d1ee5b44d436c5653b18df99a5f.jpg",
+    "https://i.pinimg.com/736x/96/5a/7b/965a7b619c47c04d181ed0c71663a41e.jpg",
+    "https://i.pinimg.com/736x/95/89/55/958955e677695074dcfbd51edc27d8ee.jpg",
+    "https://i.pinimg.com/736x/8d/cf/f8/8dcff8d30ecc9dd91b80eee38db20c95.jpg",
+    "https://i.pinimg.com/736x/81/0f/17/810f17489f97718245eb6c825a22a56d.jpg",
+    "https://i.pinimg.com/736x/b4/64/39/b46439e07ed63e25fa44d4493ec32c5c.jpg",
+    "https://i.pinimg.com/736x/cb/a2/90/cba29077ca09c0e2af2b28426acdd0fe.jpg",
+    "https://i.pinimg.com/736x/cb/a2/90/cba29077ca09c0e2af2b28426acdd0fe.jpg",
+    "https://i.pinimg.com/736x/89/8a/0c/898a0cc872c9f63dee2caa9da8746cf5.jpg",
+    "https://i.pinimg.com/736x/0e/2e/b4/0e2eb431413e77b89c40b423e53662b6.jpg",
+    "https://i.pinimg.com/736x/8e/74/f6/8e74f69b031cc46adf5ecfde2164d4ae.jpg",
+    "https://i.pinimg.com/736x/b3/f4/8c/b3f48c786c4e8a3c8321ad05b31b0ec6.jpg",
+    "https://i.pinimg.com/736x/98/84/69/98846986e12e41c7af404d00e696f27b.jpg",
+    "https://i.pinimg.com/736x/91/f4/d7/91f4d7b6bab5b02e275ed42ab5c8fbe7.jpg",
+    "https://i.pinimg.com/736x/ee/0b/1d/ee0b1ddc57aa3a2a09eedfeb756e8cb8.jpg",
+    "https://i.pinimg.com/736x/77/f6/5e/77f65eb1ef63b849fea477b0d1cffa95.jpg",
+    "https://i.pinimg.com/736x/6c/ae/51/6cae51c65766735be6c671ef98e9d4b5.jpg",
+    "https://i.pinimg.com/736x/32/c7/62/32c762e26f0bef4406ea8f9ef77b6cc0.jpg",
+    "https://i.pinimg.com/736x/60/7e/4f/607e4f5e776a034a33842dbb78007b8e.jpg",
+    "https://i.pinimg.com/736x/9b/60/2e/9b602e663a710efd67badb30884e6db7.jpg",
+    "https://i.pinimg.com/736x/d3/01/f3/d301f3ae1a44adbcdc1f7a1ad69e7b6f.jpg",
+    "https://i.pinimg.com/736x/3c/2b/c2/3c2bc2e37a7d84db742ab1431ce90730.jpg",
+    "https://i.pinimg.com/736x/3c/2b/c2/3c2bc2e37a7d84db742ab1431ce90730.jpg",
+    "https://i.pinimg.com/736x/5f/e0/06/5fe00662966b7f17f24ad07da980b5a7.jpg",
+    "https://i.pinimg.com/736x/ae/47/9a/ae479af24ea04fe38eefb0aa0802963a.jpg",
+    "https://i.pinimg.com/736x/d6/c5/7d/d6c57d74bdac30ef31326c270429ec43.jpg",
+    "https://i.pinimg.com/736x/ac/2c/2e/ac2c2e6123ebcfb7d0acf078ca21fd9f.jpg",
+    "https://i.pinimg.com/736x/ac/2c/2e/ac2c2e6123ebcfb7d0acf078ca21fd9f.jpg",
+    "https://i.pinimg.com/736x/69/44/ee/6944ee932509cbb0a3636f4bbd7192c4.jpg",
+    "https://i.pinimg.com/736x/1a/6f/e8/1a6fe888f5a985b53dafc74e1d54a53c.jpg",
+    "https://i.pinimg.com/736x/4b/7c/48/4b7c485dc75a7ea0162fed25296cc605.jpg",
 ]
 love = [
         "{user1} тайно хочет, чтобы {user2} прикоснулся к его/её руке именно сегодня.",
@@ -1804,16 +1832,25 @@ async def add_dare(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     user = update.effective_user
-    chat_ids.add(chat_id)
 
     if chat_id not in chat_members:
         chat_members[chat_id] = {}
 
     chat_members[chat_id][user.id] = {
-    "first_name": user.first_name,
-    "username": f"@{user.username}" if user.username else user.full_name,
-    "full_name": user.full_name
-}
+        "id": user.id,
+        "username": user.username,
+        "first_name": user.first_name,
+    }
+    chat_ids.add(chat_id)
+
+    text = update.message.text.lower()
+
+    for keyword, responses in keyword_reactions.items():
+        if keyword in text:
+            response = random.choice(responses)
+            await update.message.reply_text(response)
+            break  # реагировать только на первое найденное слово
+
     
 
 async def meme_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1825,7 +1862,8 @@ async def meme_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_photo(photo=meme_url, caption="🔮 Мемное-предсказание от Бабы Мани")
     
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Привет! Меня зовут Баба Маня. Напиши /prediction или /lovestory, чтобы узнать судьбу! TKACH MAX - developer")
+    await update.message.reply_text("Привет! Меня зовут Баба Маня. Напиши /prediction или /lovestory, чтобы узнать судьбу! TKACH MAX - developer. Обновление 11.06: 1.Гороскоп теперь не доступен, теперь он будет приходить 1 раз в день в чат! 2.Добавлена игра Правда или действие, с вожностью добавлять свои вопросы и действия! 3.Добавлена возможность включать и отключать автопредсказания! 4.Добавлены мемы в мемные-предсказания - списибо Викусе за помощь!")
+    
     
 async def prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, predictions)
