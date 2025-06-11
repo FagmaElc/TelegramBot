@@ -1881,7 +1881,7 @@ async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     chat_members[chat_id][user.id] = {
         "id": user.id,
-        "username": user.username,
+        "username": f"@{user.username}" if user.username else user.full_name,
         "first_name": user.first_name,
     }
     chat_ids.add(chat_id)
