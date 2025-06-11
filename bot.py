@@ -1583,6 +1583,7 @@ chat_members = {}
 chat_ids = set()
 last_horoscope_usage = {}
 last_ritual_usage = {}
+auto_posting_enabled = {}
 
 
 
@@ -1705,21 +1706,28 @@ async def send_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE, so
         )
 
     await update.message.reply_text(text)
-async def horoscope(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    now = datetime.datetime.now()
-    last_used = last_horoscope_usage.get(user_id)
+last_horoscope_sent = {}
 
-    if last_used and (now - last_used).total_seconds() < 86400:
-        await update.message.reply_text("🔒 Гороскоп можно получать только раз в 24 часа.")
-        return
-
-    last_horoscope_usage[user_id] = now
-    message = "🌟 Гороскоп на сегодня:\n\n"
-    for sign, dates in zodiac_signs.items():
-        prediction = random.choice(horoscope_texts)
-        message += f"▶️  {sign} ({dates}): {prediction}\n"
-    await update.message.reply_text(message)
+async def daily_horoscope_post(app):
+    while True:
+        now = datetime.datetime.now()
+        if now.hour == 9:  # В 9 утра
+            for chat_id in chat_ids:
+                last_sent = last_horoscope_sent.get(chat_id)
+                if not last_sent or (now - last_sent).days >= 1:
+                    message = "🌟 Гороскоп на сегодня:\n\n"
+                    for sign, dates in zodiac_signs.items():
+                        prediction = random.choice(horoscope_texts)
+                        message += f"▶️ {sign} ({dates}): {prediction}\n"
+                    try:
+                        await app.bot.send_message(chat_id=chat_id, text=message)
+                        last_horoscope_sent[chat_id] = now
+                    except Exception as e:
+                        print(f"Ошибка при отправке гороскопа в чат {chat_id}: {e}")
+        await asyncio.sleep(3600)  # Проверка каждый час
+async def after_startup(app):
+    asyncio.create_task(auto_post(app))
+    asyncio.create_task(daily_horoscope_post(app))
 
 async def tyan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
@@ -1738,10 +1746,12 @@ async def auto_post(app):
     await asyncio.sleep(10)
     while True:
         for chat_id in chat_ids:
+            if not auto_posting_enabled.get(chat_id, True):
+                continue  # Автопостинг отключён
+
             members = list(chat_members.get(chat_id, {}).values())
             if len(members) >= 2:
                 user1, user2 = random.sample(members, 2)
-
                 try:
                     text = random.choice(autopred).format(
                         user1=user1["username"],
@@ -1752,7 +1762,17 @@ async def auto_post(app):
                     await app.bot.send_message(chat_id=chat_id, text=f"🔮 Предсказание: {text}")
                 except Exception as e:
                     print(f"Ошибка при отправке в чат {chat_id}: {e}")
-        await asyncio.sleep(3600)
+        await asyncio.sleep(3600)  # Раз в час
+async def disable_autopost(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    auto_posting_enabled[chat_id] = False
+    await update.message.reply_text("🔕 Автопредсказания отключены в этом чате.")
+
+async def enable_autopost(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    auto_posting_enabled[chat_id] = True
+    await update.message.reply_text("🔔 Автопредсказания включены в этом чате.")
+
 def main():
     Thread(target=run_flask).start()
 
@@ -1770,6 +1790,8 @@ def main():
     app.add_handler(CommandHandler("memeprediction", meme_prediction))
     app.add_handler(CommandHandler("ritual", ritual))
     app.add_handler(CommandHandler("tyan", tyan))
+    app.add_handler(CommandHandler("disable_autopost", disable_autopost))
+    app.add_handler(CommandHandler("enable_autopost", enable_autopost))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
     
 
