@@ -1910,7 +1910,7 @@ async def mus_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     meme_url = random.choice(vibe)
-    await update.message.reply_photo(photo=meme_url, caption=random.choice(caption)
+    await update.message.reply_photo(photo=meme_url, caption=random.choice(caption))
     
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Привет! Меня зовут Баба Маня. Напиши /prediction или /lovestory, чтобы узнать судьбу! TKACH MAX - developer. Обновление 11.06: 1.Гороскоп теперь не доступен, теперь он будет приходить 1 раз в день в чат! 2.Добавлена игра Правда или действие, с вожностью добавлять свои вопросы и действия! 3.Добавлена возможность включать и отключать автопредсказания! 4.Добавлены мемы в мемные-предсказания - списибо Викусе за помощь!")
