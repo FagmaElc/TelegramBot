@@ -2034,7 +2034,6 @@ def main():
     app.add_handler(CommandHandler("predictiontomorrow", predictionTomorrow))
     app.add_handler(CommandHandler("lovestory", love_story))
     app.add_handler(CommandHandler("loveball", love_ball))
-    app.add_handler(CommandHandler("horoscope", horoscope))
     app.add_handler(CommandHandler("Ball", ball))
     app.add_handler(CommandHandler("memeprediction", meme_prediction))
     app.add_handler(CommandHandler("ritual", ritual))
