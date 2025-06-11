@@ -2033,6 +2033,9 @@ def main():
     app.add_handler(CommandHandler("enable_autopost", enable_autopost))
     app.add_handler(CommandHandler("truthordare", truth_or_dare))
     app.add_handler(CommandHandler("truthordare", truth_or_dare))
+    app.add_handler(CommandHandler("addtruth", add_truth))
+    app.add_handler(CommandHandler("adddare", add_dare))
+
     app.add_handler(CallbackQueryHandler(truth_or_dare_callback, pattern="^(truth|dare)\|"))
 
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
