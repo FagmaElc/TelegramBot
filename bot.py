@@ -68,6 +68,7 @@ vibe = [
     "https://eu.hitmo-top.com/get/music/20170902/ZHuki_-_Batarejjka_47951478.mp3",
     "https://eu.hitmo-top.com/get/music/20171023/2Mashi_-_Bosaya_49872796.mp3",
     "https://eu.hitmo-top.com/get/music/20180330/RASA_-_Pod_fonarjom_54937115.mp3",
+    "https://eu.hitmo-top.com/get/music/20201031/Merry_me_bellamy_-_Konfetka_71451122.mp3"
 ]
 caption = [
     "Я думаю эта песня тебя описывает:",
