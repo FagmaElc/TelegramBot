@@ -944,6 +944,7 @@ meme_urls = [
     "https://i.pinimg.com/736x/4b/7c/48/4b7c485dc75a7ea0162fed25296cc605.jpg",
 ]
 love = [
+        "{user1} тайно хочет, чтобы {user2} прикоснулся к его/её руке именно сегодня.",
         "{user1} сегодня тайно надеется на прикосновение {user2}, которое всё изменит.",
     "{user2} не сможет скрыть волнение при встрече с {user1}.",
     "Когда {user1} улыбается, {user2} забывает, как дышать.",
@@ -1418,6 +1419,7 @@ predictionsToday = [
     "Ты получишь шанс на новую жизнь. Только без сохранения.",
     "Ты станешь известным. По городским слухам.",
     "Сегодня ты испытаешь перерождение. В том же бардаке.",
+    "Ты поймёшь: худшее позади. Оно развернулось и идёт обратно."
     "Ты поймёшь: худшее позади. Оно развернулось и идёт обратно.",
      "Ты получишь шанс на новую жизнь. Только без сохранения.",
     "Ты станешь известным. По городским слухам.",
@@ -2420,13 +2422,6 @@ keyword_reactions = {
     "Маня": ["Ты звал Маню? Она рядом 👻"],
 }
 
-
-async def after_startup(app):
-    asyncio.create_task(auto_post(app))
-    asyncio.create_task(daily_horoscope_post(app))
-    asyncio.create_task(check_obidka(app))  # <--- добавили
-
-
 async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     user = update.effective_user
@@ -2487,19 +2482,6 @@ async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     user = update.effective_user
 
-    # ✅ Проверка обидки ДО всего
-    if chat_id in obidki and user.id in obidki[chat_id]:
-        obidka = obidki[chat_id][user.id]
-        if datetime.datetime.now() >= obidka["expires_at"]:
-            # Снятие истекшей обидки
-            del obidki[chat_id][user.id]
-            await update.message.reply_text(f"🕊️ С {user.first_name} снята обидка. Мир восстановлен.")
-        else:
-            # Активная обидка
-            await update.message.reply_text(f"😤 {user.first_name}, на тебя ещё держат обидку! Терпи.")
-            return  # Прекращаем дальнейшую обработку
-
-    # 📌 Добавляем пользователя в базу
     if chat_id not in chat_members:
         chat_members[chat_id] = {}
 
@@ -2510,13 +2492,15 @@ async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     }
     chat_ids.add(chat_id)
 
-    # 🧠 Реакция на ключевые слова
     text = update.message.text.lower()
+
     for keyword, responses in keyword_reactions.items():
         if keyword in text:
             response = random.choice(responses)
             await update.message.reply_text(response)
-            break
+            break  # реагировать только на первое найденное слово
+
+
 
 async def meme_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not meme_urls:
@@ -2535,14 +2519,14 @@ async def mus_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
     caption_text = random.choice(caption)
 
     await update.message.reply_text(f"{caption_text}\n{song_url}")
-    
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Привет! Меня зовут Баба Маня. Напиши /prediction или /lovestory, чтобы узнать судьбу! TKACH MAX - developer. Обновление 11.06: 1.Гороскоп теперь не доступен, теперь он будет приходить 1 раз в день в чат! 2.Добавлена игра Правда или действие, с вожностью добавлять свои вопросы и действия! 3.Добавлена возможность включать и отключать автопредсказания! 4.Добавлены мемы в мемные-предсказания - списибо Викусе за помощь!")
-    
-    
+
+
 async def prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, predictions)
-    
+
 async def predictionToday(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, predictionsToday)
 
@@ -2551,7 +2535,7 @@ async def predictionTomorrow(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 async def Recomendation(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, recom)
-    
+
 async def love_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_prediction(update, context, love_predictions)
 
@@ -2764,7 +2748,7 @@ def main():
     app.add_handler(CallbackQueryHandler(truth_or_dare_callback, pattern="^(truth|dare)\|"))
 
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
-    
+
 
 
 
@@ -2775,7 +2759,7 @@ def main():
     app.post_init = after_startup
 
     print("🤖 Баба Маня запущена!")
-    app.run_polling()
+    app.run_polling()More actions
 
 if __name__ == "__main__":
     main()
