@@ -2420,6 +2420,80 @@ keyword_reactions = {
     "Маня": ["Ты звал Маню? Она рядом 👻"],
 }
 
+async def obidka_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if len(context.args) < 2:
+        await update.message.reply_text("❗ Пример: /obidka @username 10 (в минутах)")
+        return
+
+    target_username = context.args[0]
+    try:
+        minutes = int(context.args[1])
+    except ValueError:
+        await update.message.reply_text("❗ Укажи число минут: /obidka @username 10")
+        return
+
+    user1 = update.effective_user
+    user1_id = user1.id
+    user1_display = f"@{user1.username}" if user1.username else user1.first_name
+
+    # Найдём user2 по @username в chat_members
+    chat_id = update.effective_chat.id
+    members = chat_members.get(chat_id, {})
+
+    user2 = None
+    for u in members.values():
+        if u["username"] and f"@{u['username']}" == target_username:
+            user2 = u
+            break
+
+    if not user2:
+        await update.message.reply_text("❗ Пользователь не найден в чате.")
+        return
+
+    user2_display = user2["username"]
+    key = (user1_id, user2["id"])
+    end_time = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
+
+    obidka_store[key] = end_time
+
+    await update.message.reply_text(
+        f"🥺 {user1_display} обиделся на {user2_display} на {minutes} минут!"
+    )
+async def check_obidka(app):
+    while True:
+        now = datetime.datetime.now()
+        expired = []
+
+        for key, end_time in list(obidka_store.items()):
+            if now >= end_time:
+                expired.append(key)
+
+        for key in expired:
+            user1_id, user2_id = key
+            for chat_id in chat_ids:
+                members = chat_members.get(chat_id, {})
+                user1 = members.get(user1_id)
+                user2 = members.get(user2_id)
+
+                if user1 and user2:
+                    user1_display = user1["username"]
+                    user2_display = user2["username"]
+                    try:
+                        await app.bot.send_message(
+                            chat_id,
+                            f"🤝 {user1_display} больше не обижается на {user2_display}. Мир восстановлен."
+                        )
+                    except Exception as e:
+                        print(f"Ошибка при отправке обидки: {e}")
+            del obidka_store[key]
+
+        await asyncio.sleep(60)  # проверка каждую минуту
+async def after_startup(app):
+    asyncio.create_task(auto_post(app))
+    asyncio.create_task(daily_horoscope_post(app))
+    asyncio.create_task(check_obidka(app))  # <--- добавили
+
+
 async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     user = update.effective_user
@@ -2744,6 +2818,8 @@ def main():
     app.add_handler(CommandHandler("adddare", add_dare))
     app.add_handler(CommandHandler("recomendation", Recomendation))
     app.add_handler(CallbackQueryHandler(truth_or_dare_callback, pattern="^(truth|dare)\|"))
+    application.add_handler(CommandHandler("obidka", obidka_command))
+
 
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
     
