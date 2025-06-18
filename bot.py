@@ -2420,74 +2420,74 @@ keyword_reactions = {
     "Маня": ["Ты звал Маню? Она рядом 👻"],
 }
 
-async def obidka_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if len(context.args) < 2:
-        await update.message.reply_text("❗ Пример: /obidka @username 10 (в минутах)")
-        return
+obidki = {}
 
-    target_username = context.args[0]
-    try:
-        minutes = int(context.args[1])
-    except ValueError:
-        await update.message.reply_text("❗ Укажи число минут: /obidka @username 10")
-        return
-
-    user1 = update.effective_user
-    user1_id = user1.id
-    user1_display = f"@{user1.username}" if user1.username else user1.first_name
-
-    # Найдём user2 по @username в chat_members
+async def set_obidka(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
+    sender = update.effective_user
+    args = context.args
+
+    if len(args) < 2:
+        await update.message.reply_text("❗ Использование: /obidka @username время_в_секундах")
+        return
+
+    target_username = args[0]
+    if not target_username.startswith("@"):
+        await update.message.reply_text("⚠️ Укажи пользователя через @username.")
+        return
+
+    try:
+        duration = int(args[1])
+        if duration <= 0:
+            raise ValueError
+    except ValueError:
+        await update.message.reply_text("❗ Время должно быть положительным числом в секундах.")
+        return
+
     members = chat_members.get(chat_id, {})
 
-    user2 = None
-    for u in members.values():
-        if u["username"] and f"@{u['username']}" == target_username:
-            user2 = u
+    # Ищем пользователя по username
+    target_user = None
+    for user_id, user_data in members.items():
+        if user_data["username"] and user_data["username"].lower() == target_username.lower():
+            target_user = user_data
             break
 
-    if not user2:
-        await update.message.reply_text("❗ Пользователь не найден в чате.")
+    if not target_user:
+        await update.message.reply_text(f"❗ Пользователь {target_username} не найден в этом чате.")
         return
 
-    user2_display = user2["username"]
-    key = (user1_id, user2["id"])
-    end_time = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
+    # Добавляем обидку
+    if chat_id not in obidki:
+        obidki[chat_id] = {}
 
-    obidka_store[key] = end_time
+    obidki[chat_id][target_user["id"]] = {
+        "by": sender.id,
+        "expires_at": dat_
 
-    await update.message.reply_text(
-        f"🥺 {user1_display} обиделся на {user2_display} на {minutes} минут!"
-    )
-async def check_obidka(app):
-    while True:
-        now = datetime.datetime.now()
-        expired = []
+async def check_obidka(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    user = update.effective_user
 
-        for key, end_time in list(obidka_store.items()):
-            if now >= end_time:
-                expired.append(key)
+    if chat_id not in obidki:
+        return  # Обидок нет
 
-        for key in expired:
-            user1_id, user2_id = key
-            for chat_id in chat_ids:
-                members = chat_members.get(chat_id, {})
-                user1 = members.get(user1_id)
-                user2 = members.get(user2_id)
+    user_obidka = obidki[chat_id].get(user.id)
+    if not user_obidka:
+        return  # Обидка на этого юзера не установлена
 
-                if user1 and user2:
-                    user1_display = user1["username"]
-                    user2_display = user2["username"]
-                    try:
-                        await app.bot.send_message(
-                            chat_id,
-                            f"🤝 {user1_display} больше не обижается на {user2_display}. Мир восстановлен."
-                        )
-                    except Exception as e:
-                        print(f"Ошибка при отправке обидки: {e}")
-            del obidka_store[key]
+    now = datetime.datetime.now()
+    if now >= user_obidka["expires_at"]:
+        # Обидка истекла — удаляем
+        del obidki[chat_id][user.id]
+        await update.message.reply_text(f"🕊️ С {user.first_name} снята обидка. Мир восстановлен.")
+    else:
+        # Обидка ещё действует
+        await update.message.reply_text(
+            f"😤 {user.first_name}, на тебя ещё держат обидку! Подожди немного..."
+        )
+        raise Exception("Обидка активна — блокируем дальнейшую обработку.")
 
-        await asyncio.sleep(60)  # проверка каждую минуту
 async def after_startup(app):
     asyncio.create_task(auto_post(app))
     asyncio.create_task(daily_horoscope_post(app))
@@ -2554,6 +2554,19 @@ async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     user = update.effective_user
 
+    # ✅ Проверка обидки ДО всего
+    if chat_id in obidki and user.id in obidki[chat_id]:
+        obidka = obidki[chat_id][user.id]
+        if datetime.datetime.now() >= obidka["expires_at"]:
+            # Снятие истекшей обидки
+            del obidki[chat_id][user.id]
+            await update.message.reply_text(f"🕊️ С {user.first_name} снята обидка. Мир восстановлен.")
+        else:
+            # Активная обидка
+            await update.message.reply_text(f"😤 {user.first_name}, на тебя ещё держат обидку! Терпи.")
+            return  # Прекращаем дальнейшую обработку
+
+    # 📌 Добавляем пользователя в базу
     if chat_id not in chat_members:
         chat_members[chat_id] = {}
 
@@ -2564,15 +2577,13 @@ async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     }
     chat_ids.add(chat_id)
 
+    # 🧠 Реакция на ключевые слова
     text = update.message.text.lower()
-
     for keyword, responses in keyword_reactions.items():
         if keyword in text:
             response = random.choice(responses)
             await update.message.reply_text(response)
-            break  # реагировать только на первое найденное слово
-
-    
+            break
 
 async def meme_prediction(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not meme_urls:
