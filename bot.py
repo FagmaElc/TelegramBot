@@ -2420,73 +2420,6 @@ keyword_reactions = {
     "Маня": ["Ты звал Маню? Она рядом 👻"],
 }
 
-obidki = {}
-
-async def set_obidka(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = update.effective_chat.id
-    sender = update.effective_user
-    args = context.args
-
-    if len(args) < 2:
-        await update.message.reply_text("❗ Использование: /obidka @username время_в_секундах")
-        return
-
-    target_username = args[0]
-    if not target_username.startswith("@"):
-        await update.message.reply_text("⚠️ Укажи пользователя через @username.")
-        return
-
-    try:
-        duration = int(args[1])
-        if duration <= 0:
-            raise ValueError
-    except ValueError:
-        await update.message.reply_text("❗ Время должно быть положительным числом в секундах.")
-        return
-
-    members = chat_members.get(chat_id, {})
-
-    # Ищем пользователя по username
-    target_user = None
-    for user_id, user_data in members.items():
-        if user_data["username"] and user_data["username"].lower() == target_username.lower():
-            target_user = user_data
-            break
-
-    if not target_user:
-        await update.message.reply_text(f"❗ Пользователь {target_username} не найден в этом чате.")
-        return
-
-    # Добавляем обидку
-    if chat_id not in obidki:
-        obidki[chat_id] = {}
-
-    obidki[chat_id][target_user["id"]] = {
-        "by": sender.id,
-        "expires_at": dat_
-
-async def check_obidka(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = update.effective_chat.id
-    user = update.effective_user
-
-    if chat_id not in obidki:
-        return  # Обидок нет
-
-    user_obidka = obidki[chat_id].get(user.id)
-    if not user_obidka:
-        return  # Обидка на этого юзера не установлена
-
-    now = datetime.datetime.now()
-    if now >= user_obidka["expires_at"]:
-        # Обидка истекла — удаляем
-        del obidki[chat_id][user.id]
-        await update.message.reply_text(f"🕊️ С {user.first_name} снята обидка. Мир восстановлен.")
-    else:
-        # Обидка ещё действует
-        await update.message.reply_text(
-            f"😤 {user.first_name}, на тебя ещё держат обидку! Подожди немного..."
-        )
-        raise Exception("Обидка активна — блокируем дальнейшую обработку.")
 
 async def after_startup(app):
     asyncio.create_task(auto_post(app))
@@ -2829,8 +2762,6 @@ def main():
     app.add_handler(CommandHandler("adddare", add_dare))
     app.add_handler(CommandHandler("recomendation", Recomendation))
     app.add_handler(CallbackQueryHandler(truth_or_dare_callback, pattern="^(truth|dare)\|"))
-    app.add_handler(CommandHandler("obidka", obidka_command))
-
 
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
     
