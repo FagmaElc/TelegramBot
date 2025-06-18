@@ -2818,7 +2818,7 @@ def main():
     app.add_handler(CommandHandler("adddare", add_dare))
     app.add_handler(CommandHandler("recomendation", Recomendation))
     app.add_handler(CallbackQueryHandler(truth_or_dare_callback, pattern="^(truth|dare)\|"))
-    application.add_handler(CommandHandler("obidka", obidka_command))
+    app.add_handler(CommandHandler("obidka", obidka_command))
 
 
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
