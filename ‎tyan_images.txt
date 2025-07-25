@@ -1,4 +1,4 @@
-"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmubOn7sfXN_YFy2aQlSO2X2pZKuOI-em9BA&s",
+https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmubOn7sfXN_YFy2aQlSO2X2pZKuOI-em9BA&s
     "https://i.pinimg.com/474x/ab/08/55/ab0855f46a68936d47b56bce0212df84.jpg",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNVC_TndFnwTyLGfvhQ1vO5zCt47Bc0u663g&s",
     "https://sun9-39.userapi.com/impg/wUGlPlR4u7ePG-oli52nlcILPLGW7jk0YqcNhg/zLp8RvrZseo.jpg?size=427x604&quality=95&sign=086479f2c4110b7072e57a1f2f2e46bb&type=album",
