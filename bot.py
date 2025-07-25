@@ -27,6 +27,33 @@ def index():
 def run_flask():
     port = int(os.environ.get("PORT", 5000))
     flask_app.run(host="0.0.0.0", port=port)
+
+
+predictions = load_list_from_file("predictions.txt")
+predictionsToday = load_list_from_file("predictions_today.txt")
+predictionsTomorrow = load_list_from_file("predictions_tomorrow.txt")
+recom = load_list_from_file("recom.txt")
+love_predictions = load_list_from_file("love_predictions.txt")
+love = load_list_from_file("love.txt")
+Ball = load_list_from_file("Ball.txt")
+autopred = load_list_from_file("autopred.txt")
+meme_urls = load_list_from_file("meme_urls.txt")
+vibe = load_list_from_file("vibe.txt")
+caption = load_list_from_file("caption.txt")
+
+character_traits = load_list_from_file("character_traits.txt")
+love_traits = load_list_from_file("love_traits.txt")
+career_traits = load_list_from_file("career_traits.txt")
+Work = load_list_from_file("Work.txt")
+future_predictions = load_list_from_file("future.txt")
+attractiveness = load_list_from_file("attractiveness.txt")
+tyan_images = load_list_from_file("tyan_images.txt")
+
+
+
+
+
+
 solo_predictions = [
     "{user1_first_name}, духи шепчут тебе: всё возможно, если ты веришь в себя.",
     "{user1_first_name}, сегодня удача обнимет тебя крепко — будь готов!",
@@ -3055,6 +3082,15 @@ async def truth_or_dare_callback(update: Update, context: ContextTypes.DEFAULT_T
         text=f"{prefix} для {user}:\n\n{result}",
         parse_mode=ParseMode.MARKDOWN
     )
+
+def load_list_from_file(filename):
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            return [line.strip() for line in file if line.strip()]
+    except FileNotFoundError:
+        print(f"⚠️ Файл не найден: {filename}")
+        return []
+
 
 def main():
     Thread(target=run_flask).start()
