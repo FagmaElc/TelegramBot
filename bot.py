@@ -28,6 +28,14 @@ def run_flask():
     port = int(os.environ.get("PORT", 5000))
     flask_app.run(host="0.0.0.0", port=port)
 
+def load_list_from_file(filename):
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            return [line.strip() for line in file if line.strip()]
+    except FileNotFoundError:
+        print(f"⚠️ Файл не найден: {filename}")
+        return []
+
 
 predictions = load_list_from_file("predictions.txt")
 predictionsToday = load_list_from_file("predictions_today.txt")
@@ -706,13 +714,6 @@ async def truth_or_dare_callback(update: Update, context: ContextTypes.DEFAULT_T
         parse_mode=ParseMode.MARKDOWN
     )
 
-def load_list_from_file(filename):
-    try:
-        with open(filename, "r", encoding="utf-8") as file:
-            return [line.strip() for line in file if line.strip()]
-    except FileNotFoundError:
-        print(f"⚠️ Файл не найден: {filename}")
-        return []
 
 
 def main():
