@@ -759,13 +759,9 @@ def main():
     app.add_handler(CommandHandler("adddare", add_dare))
     app.add_handler(CommandHandler("recomendation", Recomendation))
     app.add_handler(CallbackQueryHandler(truth_or_dare_callback, pattern="^(truth|dare)\|"))
-    add_meme_handler = ConversationHandler(
-    entry_points=[CommandHandler("addmeme", add_meme_start)],
-    states={
-        ADD_MEME: [MessageHandler(filters.PHOTO, handle_meme_photo)]
-    },
-    fallbacks=[CommandHandler("cancel", cancel_add_meme)],
-)
+    add_meme_handler = ConversationHandler(entry_points=[CommandHandler("addmeme", add_meme_start)],
+    states={ADD_MEME: [MessageHandler(filters.PHOTO, handle_meme_photo)]},
+    fallbacks=[CommandHandler("cancel", cancel_add_meme)],)
 
 app.add_handler(add_meme_handler)
 
