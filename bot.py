@@ -635,22 +635,6 @@ async def after_startup(app):
     asyncio.create_task(daily_horoscope_post(app))
 
 async def tyan(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.effective_user
-    user_display = f"@{user.username}" if user.username else user.full_name
-
-    if not tyan_images:
-        await update.message.reply_text("🧙‍♀️ У Бабы Мани закончились аниме-девочки!")
-        return
-
-    photo_url = random.choice(tyan_images)
-    caption = f"✨ Баба Маня превратила {user_display} в аниме-девочку!"
-
-    try:
-        await update.message.reply_photo(photo=photo_url, caption=caption)
-    except Exception as e:
-        await update.message.reply_text(f"❌ Ошибка при отправке фото:\n{e}")
-        print(f"Ошибка при отправке фото: {e}")
-async def tyan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not tyan_images:
         await update.message.reply_text("🧙‍♀️ У Бабы Мани закончились аниме-девочки!")
         return
