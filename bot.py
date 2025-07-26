@@ -665,7 +665,7 @@ async def auto_post(app):
                     await app.bot.send_message(chat_id=chat_id, text=f"🔮 Предсказание: {text}")
                 except Exception as e:
                     print(f"Ошибка при отправке в чат {chat_id}: {e}")
-        await asyncio.sleep(3600)  # Раз в час
+        await asyncio.sleep(21600)  # Раз в час
 async def disable_autopost(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     auto_posting_enabled[chat_id] = False
