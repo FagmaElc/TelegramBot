@@ -650,7 +650,13 @@ async def tyan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await update.message.reply_text(f"❌ Ошибка при отправке фото:\n{e}")
         print(f"Ошибка при отправке фото: {e}")
+async def tyan(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not tyan_images:
+        await update.message.reply_text("🧙‍♀️ У Бабы Мани закончились аниме-девочки!")
+        return
 
+    photo_url = random.choice(tyan_images)
+    await update.message.reply_photo(photo=photo_url, caption=f"✨ Баба Маня превратила {user_display} в аниме-девочку!")
 
 async def auto_post(app):
     await asyncio.sleep(10)
