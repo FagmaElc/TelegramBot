@@ -58,30 +58,6 @@ attractiveness = load_list_from_file("attractiveness.txt")
 tyan_images = load_list_from_file("tyan_images.txt")
 
 
-from telegram.ext import ConversationHandler
-
-ADD_MEME = range(1)
-
-async def add_meme_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("📸 Отправь изображение, которое хочешь добавить в мемы.")
-    return ADD_MEME
-
-async def handle_meme_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    photo = update.message.photo[-1]
-    file = await photo.get_file()
-    file_url = file.file_path
-
-    with open("meme_urls.txt", "a", encoding="utf-8") as f:
-        f.write(file_url + "\n")
-
-    await update.message.reply_text("✅ Мем добавлен! Спасибо 😎")
-    return ConversationHandler.END
-
-async def cancel_add_meme(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("❌ Отмена добавления.")
-    return ConversationHandler.END
-
-# Гороскопы
 horoscope_texts = [
     "День будет удачным для новых начинаний.",
     "Сегодня лучше держаться подальше от конфликтов.",
@@ -761,13 +737,7 @@ def main():
     app.add_handler(CommandHandler("adddare", add_dare))
     app.add_handler(CommandHandler("recomendation", Recomendation))
     app.add_handler(CallbackQueryHandler(truth_or_dare_callback, pattern="^(truth|dare)\|"))
-    add_meme_handler = ConversationHandler(
-    entry_points=[CommandHandler("addmeme", add_meme_start)],
-    states={
-        ADD_MEME: [MessageHandler(filters.PHOTO, handle_meme_photo)]
-    },
-    fallbacks=[CommandHandler("cancel", cancel_add_meme)]
-    )
+    
 
 app.add_handler(add_meme_handler)
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
