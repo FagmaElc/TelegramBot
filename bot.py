@@ -636,7 +636,7 @@ async def after_startup(app):
 
 async def tyan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not tyan_images:
-        await update.message.reply_text("🧙‍♀️ У Бабы Мани закончились аниме-девочки!")
+        await update.message.reply_text("🧙‍♀️ закончились аниме-девочки!")
         return
 
     photo_url = random.choice(tyan_images)
