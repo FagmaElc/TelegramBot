@@ -762,10 +762,8 @@ def main():
     add_meme_handler = ConversationHandler(entry_points=[CommandHandler("addmeme", add_meme_start)],
     states={ADD_MEME: [MessageHandler(filters.PHOTO, handle_meme_photo)]},
     fallbacks=[CommandHandler("cancel", cancel_add_meme)],)
-
-app.add_handler(add_meme_handler)
-
-app.add_handler(add_meme_handler)
+    app.add_handler(add_meme_handler)
+    app.add_handler(add_meme_handler)
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, track_user))
     
 
