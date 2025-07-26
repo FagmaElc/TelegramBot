@@ -638,7 +638,10 @@ async def tyan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not tyan_images:
         await update.message.reply_text("🧙‍♀️ закончились аниме-девочки!")
         return
-
+    
+    user = update.effective_user
+    user_display = f"@{user.username}" if user.username else user.full_name
+    
     photo_url = random.choice(tyan_images)
     await update.message.reply_photo(photo=photo_url, caption=f"✨ Баба Маня превратила {user_display} в аниме-девочку!")
 
